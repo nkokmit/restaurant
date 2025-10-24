@@ -6,8 +6,8 @@ public class IngredientViewDTO {
     private int ingredientId;
     private String name;
     private String type;
-    private String unit;     // từ bảng Ingredient
-    private float price;     // từ bảng IngredientSup
+    private String unit;     
+    private float price;    
 
     public IngredientViewDTO() {}
 

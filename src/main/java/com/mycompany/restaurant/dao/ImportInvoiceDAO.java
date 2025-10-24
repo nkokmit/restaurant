@@ -37,7 +37,7 @@ public class ImportInvoiceDAO extends DAO {
   }
 
   public ImportInvoice getById(int id) {
-    String sql = "SELECT id,datein,status,staff_id,supplier_id FROM ImportInvoice WHERE id=?";
+    String sql = "SELECT id,createdAt,status,staff_id,supplier_id FROM ImportInvoice WHERE id=?";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
@@ -56,7 +56,7 @@ public class ImportInvoiceDAO extends DAO {
   }
 
   public void commit(int invoiceId) throws SQLException {
-    String sql = "UPDATE ImportInvoice SET status=1 WHERE id=? AND status='draft'";
+    String sql = "UPDATE ImportInvoice SET status=1 WHERE id=? AND status=0";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setInt(1, invoiceId);
       ps.executeUpdate();

@@ -37,7 +37,7 @@ public class InvoiceServlet extends HttpServlet {
     Integer invoiceId = (Integer) req.getSession().getAttribute(SessionKeys.CURRENT_INVOICE_ID);
     if ("/commit".equals(path)) {
       try { invoiceDAO.commit(invoiceId); } catch(Exception e){ throw new ServletException(e); }
-      // clear supplier? giữ invoiceId để in
+     
       resp.sendRedirect(req.getContextPath()+"/invoice/print");
     } else {
       doGet(req, resp);

@@ -70,7 +70,7 @@ public class InvoiceDetailDAO extends DAO {
 
 
   public float sumTotal(int invoiceId) {
-    String sql = "SELECT COALESCE(SUM(quanity*unitPrice),0) FROM InvoiceDetail WHERE invoice_id=?";
+    String sql = "SELECT COALESCE(SUM(quantity*unitPrice),0) FROM InvoiceDetail WHERE invoice_id=?";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setInt(1, invoiceId);
       try (ResultSet rs = ps.executeQuery()) {
