@@ -13,8 +13,21 @@
     .no-print { display: none; }
   }
 </style>
+
+<!-- injected: modern light style -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
 </head>
 <body>
+<div class="container"><div class="card">
+
+
+<h1 class="title">PrintInvoice <span class="pill">JSP</span></h1>
+<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
 <div class="no-print">
   <a href="<%=ctx%>/supplier/search">Nhập tiếp</a>
   <button onclick="window.print()">In</button>
@@ -41,5 +54,7 @@
     </tr>
   </c:forEach>
 </table>
+
+</div></div>
 </body>
 </html>

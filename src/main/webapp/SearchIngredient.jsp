@@ -5,13 +5,26 @@
 %>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Tìm nguyên liệu</title></head>
+<head><meta charset="UTF-8"><title>Tìm nguyên liệu</title>
+<!-- injected: modern light style -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
+</head>
 <body>
+<div class="container"><div class="card">
+
+
+<h1 class="title">SearchIngredient <span class="pill">JSP</span></h1>
+<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
 <h2>Tìm nguyên liệu của NCC đã chọn</h2>
 
 <form method="get" action="<%=ctx%>/ingredient/search">
-  <input name="q" placeholder="Tên nguyên liệu" value="${param.q}">
-  <button type="submit">Tìm</button>
+  <input name="q" placeholder="Tên nguyên liệu" value="${param.q}" class="input">
+  <button type="submit" class="btn">Tìm</button>
   <a href="<%=ctx%>/AddIngredient.jsp">Thêm nguyên liệu mới</a> 
 </form>
 
@@ -33,10 +46,10 @@
           <form method="post" action="<%=ctx%>/ingredient/addLine">
             <input type="hidden" name="ingSupId" value="${it.ingredientSupId}">
             <input type="hidden" name="price" value="${it.price}">
-            <input name="qty" type="number" step="0.01" min="0.01" required>
+            <input name="qty" type="number" step="0.01" min="0.01" required class="input">
         </td>
         <td>
-            <button type="submit">Thêm dòng</button>
+            <button type="submit" class="btn">Thêm dòng</button>
           </form>
         </td>
       </tr>
@@ -61,7 +74,7 @@
         <td>
             <form method="post" action="<%=ctx%>/ingredient/removeLine">
                 <input type="hidden" name="detailId" value="${ln.detailId}">
-                <button type="submit">Xóa</button>
+                <button type="submit" class="btn">Xóa</button>
         </td>
       </tr>
     </c:forEach>
@@ -72,5 +85,7 @@
 </c:if>
 
 <p><a href="<%=ctx%>/supplier/search">Đổi nhà cung cấp</a></p>
+
+</div></div>
 </body>
 </html>

@@ -5,13 +5,26 @@
 %>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Tìm nhà cung cấp</title></head>
+<head><meta charset="UTF-8"><title>Tìm nhà cung cấp</title>
+<!-- injected: modern light style -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
+</head>
 <body>
+<div class="container"><div class="card">
+
+
+<h1 class="title">SearchSupplier <span class="pill">JSP</span></h1>
+<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
 <h2>Tìm nhà cung cấp</h2>
 
 <form method="get" action="<%=ctx%>/supplier/search">
-  <input name="q" placeholder="Tên nhà cung cấp" value="${param.q}">
-  <button type="submit">Tìm</button>
+  <input name="q" placeholder="Tên nhà cung cấp" value="${param.q}" class="input">
+  <button type="submit" class="btn">Tìm</button>
   <a href="<%=ctx%>/supplier/addView">Thêm NCC</a>
 </form>
 
@@ -32,7 +45,7 @@
         <td>
           <form method="post" action="<%=ctx%>/ingredient/start">
             <input type="hidden" name="supplierId" value="${s.id}">
-            <button type="submit">Chọn</button>
+            <button type="submit" class="btn">Chọn</button>
           </form>
         </td>
       </tr>
@@ -41,5 +54,7 @@
 </c:if>
 
 <p><a href="<%=ctx%>/Import.jsp">Quay lại</a></p>
+
+</div></div>
 </body>
 </html>
