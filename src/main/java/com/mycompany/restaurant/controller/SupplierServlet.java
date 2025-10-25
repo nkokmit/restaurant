@@ -26,11 +26,10 @@ public class SupplierServlet extends HttpServlet {
         String path = req.getPathInfo() == null ? "" : req.getPathInfo();
 
         if ("/addView".equals(path)) {
-            req.getRequestDispatcher("/AddSupplierView.jsp").forward(req, resp);
+            req.getRequestDispatcher("/AddSupplier.jsp").forward(req, resp);
             return;
         }
 
-        // default: /search
         String q = req.getParameter("q");
         List<Supplier> list = dao.searchSupplierByName(q);
         req.setAttribute("suppliers", list);

@@ -12,13 +12,14 @@
 <form method="get" action="<%=ctx%>/ingredient/search">
   <input name="q" placeholder="Tên nguyên liệu" value="${param.q}">
   <button type="submit">Tìm</button>
-  <a href="<%=ctx%>/AddIngredientView.jsp">Thêm nguyên liệu mới</a> <!-- trang demo tĩnh -->
+  <a href="<%=ctx%>/AddIngredient.jsp">Thêm nguyên liệu mới</a> 
 </form>
 
 <h3>Kết quả tìm</h3>
 <c:if test="${empty items}">
   <p><i>Không có nguyên liệu phù hợp.</i></p>
 </c:if>
+  
 <c:if test="${not empty items}">
   <table border="1" cellpadding="6" cellspacing="0">
     <tr><th>Tên</th><th>Loại</th><th>Đơn vị</th><th>Giá</th><th>Số lượng</th><th>Thêm</th></tr>
@@ -57,6 +58,11 @@
         <td>${ln.qty}</td>
         <td>${ln.unitPrice}</td>
         <td>${ln.lineTotal}</td>
+        <td>
+            <form method="post" action="<%=ctx%>/ingredient/removeLine">
+                <input type="hidden" name="detailId" value="${ln.detailId}">
+                <button type="submit">Xóa</button>
+        </td>
       </tr>
     </c:forEach>
   </table>

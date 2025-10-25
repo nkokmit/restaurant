@@ -55,10 +55,11 @@ public class ImportInvoiceDAO extends DAO {
     return null;
   }
 
-  public void commit(int invoiceId) throws SQLException {
-    String sql = "UPDATE ImportInvoice SET status=1 WHERE id=? AND status=0";
+  public void commit(int invoiceId,String note) throws SQLException {
+    String sql = "UPDATE ImportInvoice SET status=1, note=? WHERE id=? AND status=0";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, invoiceId);
+      ps.setInt(2, invoiceId);
+      ps.setString(1,note);
       ps.executeUpdate();
     }
   }

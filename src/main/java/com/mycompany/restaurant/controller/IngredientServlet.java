@@ -27,24 +27,22 @@ public class IngredientServlet extends HttpServlet {
         HttpSession ses = req.getSession();
 
         if ("/start".equals(path)) {
-          
             int supId = Integer.parseInt(req.getParameter("supplierId"));
             ses.setAttribute(SessionKeys.CURRENT_SUPPLIER_ID, supId);
-
-            Integer invoiceId = (Integer) ses.getAttribute(SessionKeys.CURRENT_INVOICE_ID);
-            if (invoiceId == null) {
-                Integer staffId = (Integer) ses.getAttribute(SessionKeys.CURRENT_STAFF_ID);
-                if (staffId == null) {
-                    resp.sendRedirect(req.getContextPath() + "/login.jsp");
-                    return;
-                }
-                try {
-                    ImportInvoice iv = invoiceDAO.createDraft(supId, staffId); // status=0
-                    ses.setAttribute(SessionKeys.CURRENT_INVOICE_ID, iv.getId());
-                } catch (Exception e) {
-                    throw new ServletException(e);
-                }
+            ses.removeAttribute(SessionKeys.CURRENT_INVOICE_ID);
+           
+            Integer staffId = (Integer) ses.getAttribute(SessionKeys.CURRENT_STAFF_ID);
+            if (staffId == null) {
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
+                return;
             }
+            try {
+                ImportInvoice iv = invoiceDAO.createDraft(supId, staffId); 
+                ses.setAttribute(SessionKeys.CURRENT_INVOICE_ID, iv.getId());
+            } catch (Exception e) {
+                throw new ServletException(e);
+            }
+            
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
@@ -58,12 +56,44 @@ public class IngredientServlet extends HttpServlet {
             int ingSupId = Integer.parseInt(req.getParameter("ingSupId"));
             float qty = Float.parseFloat(req.getParameter("qty"));
             float unitPrice = Float.parseFloat(req.getParameter("price"));
-
             try {
-                detailDAO.addLine(invoiceId, ingSupId, qty, unitPrice); 
+                detailDAO.addLine(invoiceId, ingSupId, qty, unitPrice);
             } catch (Exception e) {
                 throw new ServletException(e);
             }
+            resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+            return;
+        }
+        if ("/removeLine".equals(path)) {
+            
+            int detailId = Integer.parseInt(req.getParameter("detailId"));
+            try {
+               
+                detailDAO.removeLine(detailId);
+            } catch (Exception e) {
+                throw new ServletException(e);
+            }
+            
+            resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+            return;
+        }
+        if ("/addNewIngredient".equals(path)) {
+            Integer supId = (Integer) ses.getAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
+            if (supId == null) {
+                resp.sendRedirect(req.getContextPath() + "/supplier/search");
+                return;
+            }
+            String name = req.getParameter("name");
+            String type = req.getParameter("type");
+            String unit = req.getParameter("unit");
+            float price = Float.parseFloat(req.getParameter("price"));
+            try {
+      
+                ingSupDAO.addIngredientWithMapping( name, type, unit, price,supId);
+            } catch (Exception e) {
+                throw new ServletException(e);
+            }
+        
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
@@ -76,7 +106,15 @@ public class IngredientServlet extends HttpServlet {
             throws ServletException, IOException {
 
         req.setCharacterEncoding("UTF-8");
+        String path = req.getPathInfo() == null ? "" : req.getPathInfo();
         HttpSession ses = req.getSession();
+
+        
+        if ("/addNewIngredient".equals(path)) {
+            req.getRequestDispatcher("/AddIngredient.jsp").forward(req, resp);
+            return;
+        }
+
         Integer supId = (Integer) ses.getAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
         if (supId == null) {
             resp.sendRedirect(req.getContextPath() + "/supplier/search");

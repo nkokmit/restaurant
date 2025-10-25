@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="no-print">
-  <a href="<%=ctx%>/ingredient/search">Nhập tiếp</a>
+  <a href="<%=ctx%>/supplier/search">Nhập tiếp</a>
   <button onclick="window.print()">In</button>
 </div>
 

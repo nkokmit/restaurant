@@ -13,19 +13,29 @@ import java.util.*;
 public class InvoiceDetailDAO extends DAO {
 
   public void addLine(int invoiceId, int ingredientSupId, float qty, float unitPrice) throws SQLException {
-    String sql = "INSERT INTO InvoiceDetail(invoice_id,ingredientSup_id,quantity,unitPrice) VALUES(?,?,?,?)";
     
-    
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, invoiceId);
-      ps.setInt(2, ingredientSupId);
-      ps.setFloat(3, qty);
-     
-      ps.setFloat(4, unitPrice); 
-      
-      ps.executeUpdate();
+    String sqlUpdate = "UPDATE InvoiceDetail SET quantity = quantity + ? WHERE invoice_id = ? AND ingredientSup_id = ?";
+    int rowsAffected = 0;
+
+    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+        psUpdate.setFloat(1, qty);
+        psUpdate.setInt(2, invoiceId);
+        psUpdate.setInt(3, ingredientSupId);
+        rowsAffected = psUpdate.executeUpdate();
     }
-  }
+    
+    if (rowsAffected == 0) {
+        
+        String sqlInsert = "INSERT INTO InvoiceDetail(invoice_id,ingredientSup_id,quantity,unitPrice) VALUES(?,?,?,?)";
+        try (PreparedStatement psInsert = con.prepareStatement(sqlInsert)) {
+            psInsert.setInt(1, invoiceId);
+            psInsert.setInt(2, ingredientSupId);
+            psInsert.setFloat(3, qty);
+            psInsert.setFloat(4, unitPrice);
+            psInsert.executeUpdate();
+        }
+    }
+}
 
   public void removeLine(int detailId) throws SQLException {
     try (PreparedStatement ps = con.prepareStatement("DELETE FROM InvoiceDetail WHERE id=?")) {
@@ -41,7 +51,7 @@ public class InvoiceDetailDAO extends DAO {
         "       ing.name AS ingredientName, " +
         "       d.quantity AS qty, " +
         "       d.unitPrice AS unitPrice, " +
-        "       (d.quantity * d.unitPrice) AS lineTotal " +          // không còn cột line_total
+        "       (d.quantity * d.unitPrice) AS lineTotal " +          
         "FROM InvoiceDetail d " +
         "JOIN IngredientSup isup ON isup.id = d.ingredientSup_id " +
         "JOIN Ingredient ing ON ing.id = isup.ingredient_id " +
@@ -66,8 +76,6 @@ public class InvoiceDetailDAO extends DAO {
     }
     return list;
 }
-
-
 
   public float sumTotal(int invoiceId) {
     String sql = "SELECT COALESCE(SUM(quantity*unitPrice),0) FROM InvoiceDetail WHERE invoice_id=?";

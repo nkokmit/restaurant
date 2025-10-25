@@ -14,7 +14,8 @@ import java.util.List;
 public class ImportInvoice {
     private int id;
     private Date dateIn;
-    private int status; // "draft" | "confirmed"
+    private int status;
+    private String note;
     private WarehouseStaff staff;
     private Supplier sup;
     private List<InvoiceDetail> details;
@@ -26,6 +27,9 @@ public class ImportInvoice {
 
     public Date getDateIn() { return dateIn; }
     public void setDateIn(Date dateIn) { this.dateIn = dateIn; }
+    
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
 
     public int getStatus() { return status; }
     public void setStatus(int status) { this.status = status; }

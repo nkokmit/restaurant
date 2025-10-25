@@ -23,7 +23,7 @@ public class SupplierDAO extends DAO {
   }
 
   public List<Supplier> searchSupplierByName(String name) {
-    String sql = "SELECT id,name,addr,tel,email FROM Supplier WHERE name LIKE ? ORDER BY name";
+    String sql = "SELECT id,name,addr,tel,email FROM Supplier WHERE name LIKE ? ORDER BY id";
     List<Supplier> out = new ArrayList<>();
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setString(1, "%" + (name==null?"":name.trim()) + "%");

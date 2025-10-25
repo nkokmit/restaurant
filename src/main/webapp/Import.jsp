@@ -6,9 +6,12 @@
 <html>
 <head><meta charset="UTF-8"><title>Import Menu</title></head>
 <body>
-<h2>Quản lý nhập hàng</h2>
+<h2>HOME</h2>
 <form method="get" action="<%=ctx%>/supplier/search">
-  <button type="submit">Nhập hàng (tìm nhà cung cấp)</button>
+  <button type="submit">Nhập hàng </button>
+</form>
+<form method="get" action="<%=ctx%>/supplier/search">
+  <button type="submit">Tìm kiếm món ăn</button>
 </form>
 </body>
 </html>

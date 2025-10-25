@@ -36,11 +36,13 @@ public class InvoiceServlet extends HttpServlet {
     String path = req.getPathInfo()==null? "": req.getPathInfo();
     Integer invoiceId = (Integer) req.getSession().getAttribute(SessionKeys.CURRENT_INVOICE_ID);
     if ("/commit".equals(path)) {
-      try { invoiceDAO.commit(invoiceId); } catch(Exception e){ throw new ServletException(e); }
-     
-      resp.sendRedirect(req.getContextPath()+"/invoice/print");
-    } else {
-      doGet(req, resp);
-    }
+        String note = req.getParameter("note");
+        try { invoiceDAO.commit(invoiceId,note); } 
+        catch(Exception e){ throw new ServletException(e); }
+
+        resp.sendRedirect(req.getContextPath()+"/invoice/print");
+      } else {
+        doGet(req, resp);
+      }
   }
 }
