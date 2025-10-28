@@ -18,8 +18,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <!-- ĐỔI TÊN PACKAGE Ở servlet-class SANG com.mycompany.restaurant... -->
-  <servlet>
+   <servlet>
     <servlet-name>AuthServlet</servlet-name>
     <servlet-class>com.mycompany.restaurant.controller.AuthServlet</servlet-class>
   </servlet>
@@ -27,6 +26,15 @@
     <servlet-name>AuthServlet</servlet-name>
     <url-pattern>/auth/*</url-pattern>
   </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DishServlet</servlet-name>
+        <servlet-class>com.mycompany.restaurant.controller.DishServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>DishServlet</servlet-name>
+      <url-pattern>/dish/*</url-pattern>
+    </servlet-mapping>
 
   <servlet>
     <servlet-name>SupplierServlet</servlet-name>
@@ -36,6 +44,7 @@
     <servlet-name>SupplierServlet</servlet-name>
     <url-pattern>/supplier/*</url-pattern>
   </servlet-mapping>
+  
 
   <servlet>
     <servlet-name>IngredientServlet</servlet-name>

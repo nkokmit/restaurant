@@ -33,6 +33,6 @@ public class AuthServlet extends HttpServlet {
         // có thể lưu tên để hiển thị
         ses.setAttribute("CURRENT_STAFF_NAME", st.getName());
 
-        resp.sendRedirect(req.getContextPath() + "/Import.jsp");
+        resp.sendRedirect(req.getContextPath() + "/Home.jsp");
     }
 }

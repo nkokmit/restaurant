@@ -14,9 +14,8 @@
 </head>
 <body>
 <div class="container"><div class="card">
-<h1 class="title">AddSupplier <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
-<h2>Thêm nhà cung cấp</h2>
+<h1 class="title">Nhập hàng | Thêm nhà cung cấp</h1>
+<h2>Nhập thông tin nhà cung cấp</h2>
 <form method="post" action="<%=ctx%>/supplier/add">
   <div><label>Tên: </label><input name="name" required class="input"></div>
   <div><label>Địa chỉ: </label><input name="addr" class="input"></div>

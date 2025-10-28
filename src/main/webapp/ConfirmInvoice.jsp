@@ -19,8 +19,8 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">ConfirmInvoice <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
+<h1 class="title">Nhập hàng | Xác nhận hóa đơn</h1>
+
 <h2>Xác nhận hóa đơn nhập</h2>
 
 <c:if test="${empty lines}">

@@ -26,8 +26,8 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">PrintInvoice <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
+<h1 class="title">Nhập hàng | In hóa đơn</h1>
+
 <div class="no-print">
   <a href="<%=ctx%>/supplier/search">Nhập tiếp</a>
   <button onclick="window.print()">In</button>

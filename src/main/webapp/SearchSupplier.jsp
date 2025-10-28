@@ -18,10 +18,7 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">SearchSupplier <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
-<h2>Tìm nhà cung cấp</h2>
-
+<h1 class="title">Nhập hàng | Tìm nhà cung cấp </h1>
 <form method="get" action="<%=ctx%>/supplier/search">
   <input name="q" placeholder="Tên nhà cung cấp" value="${param.q}" class="input">
   <button type="submit" class="btn">Tìm</button>
@@ -53,8 +50,9 @@
   </table>
 </c:if>
 
-<p><a href="<%=ctx%>/Import.jsp">Quay lại</a></p>
+<p><a href="<%=ctx%>/Home.jsp">Quay lại</a></p>
 
-</div></div>
+</div>
+
 </body>
 </html>

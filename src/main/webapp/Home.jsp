@@ -4,7 +4,7 @@
 %>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Đăng nhập</title>
+<head><meta charset="UTF-8"><title>Home Menu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,14 +16,16 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">Đăng nhập</h1>
+<h1 class="title">HOME </h1>
 
-<c:if test="${not empty error}"><p style="color:red">${error}</p></c:if>
-<form method="post" action="<%=ctx%>/auth/login">
-  <label>Tài khoản</label><input name="u" required class="input">
-  <label>Mật khẩu</label><input type="password" name="p" required class="input">
-  <button type="submit" class="btn">Đăng nhập</button>
-</form>
+<div class="button-container">
+  <form method="get" action="<%=ctx%>/supplier/search">
+    <button type="submit" class="btn">Nhập hàng</button>
+  </form>
+  <form method="get" action="<%=ctx%>/dish/search">
+    <button type="submit" class="btn">Tìm kiếm món ăn</button>
+  </form>
+</div>
 
 </div></div>
 </body>

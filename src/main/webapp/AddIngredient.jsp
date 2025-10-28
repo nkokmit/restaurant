@@ -17,10 +17,9 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">AddIngredient <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
-<h2>Thêm nguyên liệu & ánh xạ với NCC hiện tại</h2>
-<form method="post" action="<%=ctx%>/ingredient/addNewIngredient"> <!-- TODO: tạo endpoint nếu muốn -->
+<h1 class="title">Nhập hàng | Thêm nguyên liệu</h1>
+<h2>Nhập thông tin nguyên liệu</h2>
+<form method="post" action="<%=ctx%>/ingredient/addNewIngredient"> 
   <div><label>Tên: </label><input name="name" required class="input"></div>
   <div>
       <label>Loại: </label>

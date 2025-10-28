@@ -18,8 +18,8 @@
 <div class="container"><div class="card">
 
 
-<h1 class="title">SearchIngredient <span class="pill">JSP</span></h1>
-<p class="sub">Trang được tinh chỉnh giao diện nhẹ, giữ nguyên logic.</p>
+<h1 class="title">Nhập hàng | Tìm kiếm món ăn</h1>
+
 <h2>Tìm nguyên liệu của NCC đã chọn</h2>
 
 <form method="get" action="<%=ctx%>/ingredient/search">
