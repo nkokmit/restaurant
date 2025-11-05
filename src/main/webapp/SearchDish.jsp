@@ -12,7 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 
 </head>
 <body>
@@ -30,13 +31,15 @@
 
         <c:if test="${not empty dishes}">
           <table border="1" cellpadding="6" cellspacing="0">
-            <tr><th>ID</th><th>Tên</th><th>Loại</th><th>Giá</th><th>Miêu tả</th><th>Giảm giá</th></tr>
+            <tr><th>ID</th><th>Tên</th><th>Loại</th><th>Giá(VNĐ)</th><th>Miêu tả</th><th>Giảm giá</th></tr>
             <c:forEach var="d" items="${dishes}">
               <tr>
                 <td>${d.id}</td>
                 <td>${d.name}</td>
                 <td>${d.type}</td>
-                <td>${d.price}</td>
+                <td>
+                    <fmt:formatNumber value="${d.price}" maxFractionDigits="0" />
+                </td>
                 <td>${d.descr}</td>
                 <td><fmt:formatNumber value="${d.sale}" type="percent" maxFractionDigits="1" /></td>
                 <td>
@@ -49,9 +52,10 @@
             </c:forEach>
           </table>
         </c:if>
-
-        <p><a href="<%=ctx%>/Home.jsp">Quay lại</a></p>
-
+          
+        <div class="actions between">
+            <a class="btn secondary"href="<%=ctx%>/Home.jsp">Quay lại</a>    
+        </div>
     </div>
 </div>
 </body>

@@ -10,9 +10,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 </head>
 <body>
+<div class="site-brand">RESTAURANT MIT</div>    
 <div class="container"><div class="card">
 <h1 class="title">Nhập hàng | Thêm nhà cung cấp</h1>
 <h2>Nhập thông tin nhà cung cấp</h2>
@@ -21,8 +23,11 @@
   <div><label>Địa chỉ: </label><input name="addr" class="input"></div>
   <div><label>Điện thoại: </label><input name="tel" class="input"></div>
   <div><label>Email: </label><input name="email" class="input"></div>
-  <button type="submit" class="btn">Lưu</button>
-  <a href="<%=ctx%>/supplier/search">Hủy</a>
+  <div class="actions between">
+        <a class="btn secondary" href="<%=ctx%>/supplier/search">Hủy</a>
+        <button type="submit" class="btn">Lưu</button>
+  </div>
+  
 </form>
 
 </div></div>

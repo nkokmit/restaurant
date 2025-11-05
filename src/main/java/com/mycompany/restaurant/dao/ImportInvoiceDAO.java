@@ -13,54 +13,23 @@ import java.util.Date;
 
 public class ImportInvoiceDAO extends DAO {
 
-  public ImportInvoice createDraft(int supplierId, int staffId) throws SQLException {
-    String sql = "INSERT INTO ImportInvoice(createdAt,status,staff_id,supplier_id) VALUES(?,?,?,?)";
-    try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-      ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-      ps.setInt(2, 0);
-      ps.setInt(3, staffId);
-      ps.setInt(4, supplierId);
-      ps.executeUpdate();
-      try (ResultSet rs = ps.getGeneratedKeys()) {
-        if (rs.next()) {
-          ImportInvoice iv = new ImportInvoice();
-          iv.setId(rs.getInt(1));
-          iv.setDateIn(new Date());
-          iv.setStatus(0);
-          WarehouseStaff w = new WarehouseStaff(); w.setId(staffId); iv.setStaff(w);
-          Supplier s = new Supplier(); s.setId(supplierId); iv.setSup(s);
-          return iv;
+  public ImportInvoice insertConfirmed(int supId, int staffId) {
+        String sql = "INSERT INTO ImportInvoice(status, staff_id, supplier_id, createdAt) " +
+                     "OUTPUT INSERTED.id VALUES(1, ?, ?, GETDATE())";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, staffId);
+            ps.setInt(2, supId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ImportInvoice iv = new ImportInvoice();
+                    iv.setId(rs.getInt(1));
+                    iv.setStatus(1);
+                    return iv;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-      }
+        return null;
     }
-    return null;
-  }
-
-  public ImportInvoice getById(int id) {
-    String sql = "SELECT id,createdAt,status,staff_id,supplier_id FROM ImportInvoice WHERE id=?";
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, id);
-      try (ResultSet rs = ps.executeQuery()) {
-        if (rs.next()) {
-          ImportInvoice iv = new ImportInvoice();
-          iv.setId(rs.getInt(1));
-          iv.setDateIn(rs.getTimestamp(2));
-          iv.setStatus(rs.getInt(3));
-          WarehouseStaff w = new WarehouseStaff(); w.setId(rs.getInt(4)); iv.setStaff(w);
-          Supplier s = new Supplier(); s.setId(rs.getInt(5)); iv.setSup(s);
-          return iv;
-        }
-      }
-    } catch (SQLException e) { throw new RuntimeException(e); }
-    return null;
-  }
-
-  public void commit(int invoiceId,String note) throws SQLException {
-    String sql = "UPDATE ImportInvoice SET status=1, note=? WHERE id=? AND status=0";
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(2, invoiceId);
-      ps.setString(1,note);
-      ps.executeUpdate();
-    }
-  }
 }

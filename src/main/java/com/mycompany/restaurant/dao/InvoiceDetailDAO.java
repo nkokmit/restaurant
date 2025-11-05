@@ -87,5 +87,27 @@ public class InvoiceDetailDAO extends DAO {
         
       }
     } catch (SQLException e) { throw new RuntimeException(e); }
+    
   }
+   public void insertMany(int invoiceId, List<InvoiceDetailViewDTO> lines, List<Integer> ingSupIds) {
+        if (lines == null || lines.isEmpty()) return;
+        if (ingSupIds == null || ingSupIds.size() != lines.size()) {
+            throw new IllegalArgumentException("ingSupIds size must match lines size");
+        }
+        String sql = "INSERT INTO InvoiceDetail(invoice_id, ingredientSup_id, quantity, unitPrice) VALUES(?,?,?,?)";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            for (int i = 0; i < lines.size(); i++) {
+                InvoiceDetailViewDTO d = lines.get(i);
+                int ingSupId = ingSupIds.get(i);
+                ps.setInt(1, invoiceId);
+                ps.setInt(2, ingSupId);
+                ps.setFloat(3, d.getQty());
+                ps.setFloat(4, d.getUnitPrice());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

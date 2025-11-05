@@ -9,10 +9,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 
 </head>
 <body>
+<div class="site-brand">RESTAURANT MIT</div>
 <div class="container"><div class="card">
 
 

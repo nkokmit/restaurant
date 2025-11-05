@@ -11,18 +11,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 
 </head>
 <body>
+<div class="site-brand">RESTAURANT MIT</div>    
 <div class="container"><div class="card">
 
 
 <h1 class="title">Nhập hàng | Tìm nhà cung cấp </h1>
-<form method="get" action="<%=ctx%>/supplier/search">
+<form method="get" action="<%=ctx%>/supplier/search" class="toolbar">
   <input name="q" placeholder="Tên nhà cung cấp" value="${param.q}" class="input">
   <button type="submit" class="btn">Tìm</button>
-  <a href="<%=ctx%>/supplier/addView">Thêm NCC</a>
+  <a class="btn" href="<%=ctx%>/supplier/addView">Thêm NCC</a>
+  
 </form>
 
 <c:if test="${empty suppliers}">
@@ -50,8 +53,10 @@
   </table>
 </c:if>
 
-<p><a href="<%=ctx%>/Home.jsp">Quay lại</a></p>
-
+ <div class="actions between">
+  <a class="btn secondary" href="<%=ctx%>/Home.jsp">Quay lại</a>
+  
+</div>
 </div>
 
 </body>

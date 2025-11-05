@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 </head>
 
 <body>
@@ -38,7 +39,7 @@
                 <div>
                     <label>Đơn giá</label>
                     <p>
-                        <fmt:formatNumber value="${dish.price}" type="currency" currencySymbol="VNĐ" maxFractionDigits="0" />
+                        <fmt:formatNumber value="${dish.price}" pattern="#,##0 VNĐ" />
                     </p>
                 </div>
                 <div>

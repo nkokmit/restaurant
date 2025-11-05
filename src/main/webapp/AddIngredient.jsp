@@ -10,10 +10,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css?v=<%=System.currentTimeMillis()%>">
 
 </head>
 <body>
+<div class="site-brand">RESTAURANT MIT</div>    
 <div class="container"><div class="card">
 
 
@@ -44,9 +46,12 @@
         <option value="hộp">hộp</option>
     </select>
   </div>
-  <div><label>Giá: </label><input name="price" type="number" step="0.01" min="0" required class="input"></div>
-  <button type="submit" class="btn">Lưu</button>
-  <a href="<%=ctx%>/ingredient/search">Hủy</a>
+  <div><label>Giá(VNĐ): </label><input name="price" type="number" step="0.01" min="0" required class="input"></div>
+
+  <div class="actions between">
+        <a class="btn secondary" href="<%=ctx%>/ingredient/search">Hủy</a>
+        <button type="submit" class="btn">Lưu</button>
+    </div>
 </form>
 
 </div></div>

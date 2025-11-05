@@ -23,7 +23,7 @@ public class IngredientSupDAO extends DAO {
     List<IngredientViewDTO> out = new ArrayList<>();
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setInt(1, supplierId);
-      ps.setString(2, (q==null?"":q.trim()) + "%");
+      ps.setString(2, ("%"+ (q==null?"":q.trim())) + "%");
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
             IngredientViewDTO v = new IngredientViewDTO();
@@ -48,13 +48,13 @@ public class IngredientSupDAO extends DAO {
         int ingredientId;
 
         try (PreparedStatement ps = con.prepareStatement(
-            "SELECT ingredient_id FROM Ingredient WHERE name = ? AND type = ? AND unit = ?")) {
+            "SELECT id FROM Ingredient WHERE name = ? AND type = ? AND unit = ?")) {
             ps.setString(1, name);
             ps.setString(2, type);
             ps.setString(3, unit);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ingredientId = rs.getInt("ingredient_id");
+                    ingredientId = rs.getInt("id");
                 } else {
                     try (PreparedStatement psInsert = con.prepareStatement(
                         "INSERT INTO Ingredient(name,type,unit) VALUES(?,?,?)",
@@ -93,4 +93,27 @@ public class IngredientSupDAO extends DAO {
         con.setAutoCommit(true); 
     }
 }
+    public BasicIngSup getBasic(int ingSupId) {
+        String sql = "SELECT i.name, isup.price FROM IngredientSup isup " +
+                     "JOIN Ingredient i ON i.id = isup.ingredient_id WHERE isup.id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, ingSupId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new BasicIngSup(rs.getString(1), rs.getFloat(2));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public static final class BasicIngSup {
+        public final String name;
+        public final float defaultPrice;
+        public BasicIngSup(String name, float defaultPrice) {
+            this.name = name; this.defaultPrice = defaultPrice;
+        }
+    }
 }

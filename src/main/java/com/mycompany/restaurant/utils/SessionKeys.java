@@ -12,5 +12,5 @@ public final class SessionKeys {
   private SessionKeys(){}
   public static final String CURRENT_STAFF_ID = "CURRENT_STAFF_ID";
   public static final String CURRENT_SUPPLIER_ID = "CURRENT_SUPPLIER_ID";
-  public static final String CURRENT_INVOICE_ID = "CURRENT_INVOICE_ID";
+  public static final String CURRENT_CART        = "CURRENT_CART";
 }
