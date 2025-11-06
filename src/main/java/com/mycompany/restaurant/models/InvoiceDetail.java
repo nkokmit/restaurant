@@ -13,8 +13,7 @@ public class InvoiceDetail {
     private ImportInvoice invoice;
     private IngredientSup ingSup;
     private float quantity;
-    private float lineTotal;
-
+    
     public InvoiceDetail() {}
 
     public int getId() { return id; }
@@ -29,6 +28,4 @@ public class InvoiceDetail {
     public float getQuantity() { return quantity; }
     public void setQuantity(float quantity) { this.quantity = quantity; }
 
-    public float getLineTotal() { return lineTotal; }
-    public void setLineTotal(float lineTotal) { this.lineTotal = lineTotal; }
 }

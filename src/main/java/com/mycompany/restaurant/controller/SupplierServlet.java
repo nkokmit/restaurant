@@ -50,7 +50,7 @@ public class SupplierServlet extends HttpServlet {
             s.setTel(req.getParameter("tel"));
             s.setEmail(req.getParameter("email"));
             try {
-                dao.addSupplierDAO(s);
+                dao.addSupplier(s);
             } catch (Exception e) {
                 throw new ServletException(e);
             }

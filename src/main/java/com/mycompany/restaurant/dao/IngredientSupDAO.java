@@ -41,17 +41,16 @@ public class IngredientSupDAO extends DAO {
     return out;
   }
 
- public int addIngredientWithMapping(String name, String type, String unit,
-                                      float price, int supplierId) throws SQLException {
+ public boolean addIngredientWithMapping(IngredientViewDTO i) throws SQLException {
     con.setAutoCommit(false);
     try {
         int ingredientId;
 
         try (PreparedStatement ps = con.prepareStatement(
             "SELECT id FROM Ingredient WHERE name = ? AND type = ? AND unit = ?")) {
-            ps.setString(1, name);
-            ps.setString(2, type);
-            ps.setString(3, unit);
+            ps.setString(1, i.getName());
+            ps.setString(2, i.getType());
+            ps.setString(3, i.getUnit());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     ingredientId = rs.getInt("id");
@@ -59,9 +58,9 @@ public class IngredientSupDAO extends DAO {
                     try (PreparedStatement psInsert = con.prepareStatement(
                         "INSERT INTO Ingredient(name,type,unit) VALUES(?,?,?)",
                         Statement.RETURN_GENERATED_KEYS)) {
-                        psInsert.setString(1, name);
-                        psInsert.setString(2, type);
-                        psInsert.setString(3, unit);
+                        psInsert.setString(1, i.getName());
+                        psInsert.setString(2, i.getType());
+                        psInsert.setString(3, i.getUnit());
                         psInsert.executeUpdate();
                         try (ResultSet rsGeneratedKeys = psInsert.getGeneratedKeys()) {
                             rsGeneratedKeys.next();
@@ -76,8 +75,8 @@ public class IngredientSupDAO extends DAO {
             "INSERT INTO IngredientSup(ingredient_id,supplier_id,price) VALUES(?,?,?)",
             Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, ingredientId);
-            ps.setInt(2, supplierId);
-            ps.setFloat(3, price);
+            ps.setInt(2, i.getIngredientSupId());
+            ps.setFloat(3, i.getPrice());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 rs.next(); 
@@ -85,12 +84,12 @@ public class IngredientSupDAO extends DAO {
             }
         }
         con.commit(); 
-        return ingredientSupId;
+        return true;
     } catch (SQLException ex) { 
         con.rollback(); 
-        throw ex; 
+        throw ex;
     } finally { 
-        con.setAutoCommit(true); 
+        con.setAutoCommit(true);   
     }
 }
     public BasicIngSup getBasic(int ingSupId) {

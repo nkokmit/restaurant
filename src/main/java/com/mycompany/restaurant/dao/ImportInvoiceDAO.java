@@ -13,23 +13,30 @@ import java.util.Date;
 
 public class ImportInvoiceDAO extends DAO {
 
-  public ImportInvoice insertConfirmed(int supId, int staffId) {
-        String sql = "INSERT INTO ImportInvoice(status, staff_id, supplier_id, createdAt) " +
-                     "OUTPUT INSERTED.id VALUES(1, ?, ?, GETDATE())";
+  public boolean addInvoice(ImportInvoice inv) {
+        if (inv == null) return false;
+        Supplier sup = inv.getSup();
+        WarehouseStaff staff = inv.getStaff();
+        if (sup == null || staff == null) return false;
+
+        final String sql =
+                "INSERT INTO ImportInvoice(status, staff_id, supplier_id, createdAt) " +
+                "OUTPUT INSERTED.id VALUES(1, ?, ?, GETDATE())";
+
         try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, staffId);
-            ps.setInt(2, supId);
+            ps.setInt(1, staff.getId());
+            ps.setInt(2, sup.getId());
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ImportInvoice iv = new ImportInvoice();
-                    iv.setId(rs.getInt(1));
-                    iv.setStatus(1);
-                    return iv;
+                    inv.setId(rs.getInt(1));
+                    inv.setStatus(1);
+                    return true;
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return false;
     }
 }

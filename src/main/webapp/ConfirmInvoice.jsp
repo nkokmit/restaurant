@@ -35,7 +35,7 @@
         <tr>
             <td>${st.index + 1}</td>
             <td>${ln.ingredientName}</td>
-            <td>${ln.qty}</td>
+            <td>${ln.quantity}</td>
             <td>
                 <fmt:formatNumber value="${ln.unitPrice}" maxFractionDigits="0" />
             </td>

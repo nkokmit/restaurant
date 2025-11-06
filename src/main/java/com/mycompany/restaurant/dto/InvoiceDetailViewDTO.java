@@ -3,15 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.restaurant.dto;
-
+import com.mycompany.restaurant.models.ImportInvoice;
+import com.mycompany.restaurant.models.IngredientSup;
 /**
  *
  * @author hungmit
  */
 public class InvoiceDetailViewDTO {
     public int detailId;
+    private int invoiceId;      
+    private int ingredientSupId;
     public String ingredientName;
-    public float qty;
+    public float quantity;
     public float unitPrice;
     public float lineTotal;
 
@@ -25,8 +28,8 @@ public class InvoiceDetailViewDTO {
         return ingredientName;
     }
 
-    public float getQty() {
-        return qty;
+    public float getQuantity() {
+        return quantity;
     }
 
     public float getUnitPrice() {
@@ -47,8 +50,8 @@ public class InvoiceDetailViewDTO {
         this.ingredientName = ingredientName;
     }
 
-    public void setQty(float qty) {
-        this.qty = qty;
+    public void setQuantity(float qty) {
+        this.quantity = qty;
     }
 
     public void setUnitPrice(float unitPrice) {
@@ -58,4 +61,23 @@ public class InvoiceDetailViewDTO {
     public void setLineTotal(float lineTotal) {
         this.lineTotal = lineTotal;
     }
+
+    public int getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public int getIngredientSupId() {
+        return ingredientSupId;
+    }
+
+    public void setIngredientSupId(int ingredientSupId) {
+        this.ingredientSupId = ingredientSupId;
+    }
+
+    
+    
 }

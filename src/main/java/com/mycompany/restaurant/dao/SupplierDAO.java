@@ -11,7 +11,7 @@ import java.util.*;
 
 public class SupplierDAO extends DAO {
 
-  public void addSupplierDAO(Supplier u) throws SQLException {
+  public boolean addSupplier(Supplier u) {
     String sql = "INSERT INTO Supplier(name, addr, tel, email) VALUES(?,?,?,?)";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setString(1, u.getName());
@@ -19,7 +19,13 @@ public class SupplierDAO extends DAO {
       ps.setString(3, u.getTel());
       ps.setString(4, u.getEmail());
       ps.executeUpdate();
+      return true;
+    }catch(SQLException e)
+    {
+       e.printStackTrace();
+       return false;
     }
+    
   }
 
   public List<Supplier> searchSupplierByName(String name) {

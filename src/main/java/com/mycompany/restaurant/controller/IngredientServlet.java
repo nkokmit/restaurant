@@ -13,6 +13,7 @@ import java.util.List;
 
 public class IngredientServlet extends HttpServlet {
 
+    private static final float EPS = 1e-4f; // so sánh float cho unitPrice
     private final IngredientSupDAO ingSupDAO = new IngredientSupDAO();
 
     @Override
@@ -30,6 +31,7 @@ public class IngredientServlet extends HttpServlet {
             if (oldSup == null || oldSup != supId) {
                 ses.setAttribute(SessionKeys.CURRENT_SUPPLIER_ID, supId);
                 ses.removeAttribute(SessionKeys.CURRENT_CART);
+                // bỏ hẳn list ids song song (không còn dùng)
                 ses.removeAttribute("CART_INGSUP_IDS");
             }
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
@@ -43,11 +45,18 @@ public class IngredientServlet extends HttpServlet {
                 return;
             }
 
-            int ingSupId = Integer.parseInt(req.getParameter("ingSupId"));
-            float qty       = Float.parseFloat(req.getParameter("qty"));
-            float unitPrice = Float.parseFloat(req.getParameter("price"));
+            // Lấy tham số
+            int ingSupId     = Integer.parseInt(req.getParameter("ingSupId"));
+            float qty        = Float.parseFloat(req.getParameter("qty"));
+            float unitPrice  = Float.parseFloat(req.getParameter("price"));
 
-            // Lấy tên nguyên liệu (để hiển thị)
+            // Validate cơ bản
+            if (ingSupId <= 0 || qty <= 0f || unitPrice < 0f) {
+                resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+                return;
+            }
+
+            // Lấy tên NL để hiển thị
             IngredientSupDAO.BasicIngSup info = ingSupDAO.getBasic(ingSupId);
             String ingName = (info != null ? info.name : "Nguyên liệu #" + ingSupId);
 
@@ -56,90 +65,82 @@ public class IngredientServlet extends HttpServlet {
                     (List<InvoiceDetailViewDTO>) ses.getAttribute(SessionKeys.CURRENT_CART);
             if (cart == null) cart = new ArrayList<>();
 
-            @SuppressWarnings("unchecked")
-            List<Integer> cartIngSupIds = (List<Integer>) ses.getAttribute("CART_INGSUP_IDS");
-            if (cartIngSupIds == null) cartIngSupIds = new ArrayList<>();
-
-            // --- Gộp nếu đã có cùng ingSupId & cùng unitPrice ---
-            final float EPS = 1e-6f;
-            boolean merged = false;
-            for (int i = 0; i < cart.size(); i++) {
-                if (cartIngSupIds.get(i) == ingSupId) {
-                    InvoiceDetailViewDTO cur = cart.get(i);
-                    if (Math.abs(cur.getUnitPrice() - unitPrice) < EPS) {
-                        // cùng đơn giá -> cộng dồn số lượng
-                        float newQty = cur.getQty() + qty;
-                        cur.setQty(newQty);
-                        cur.setLineTotal(newQty * cur.getUnitPrice());
-                        merged = true;
-                        break;
-                    }
+            // Tìm xem đã có dòng trùng (ingredientSupId + unitPrice) để gộp
+            InvoiceDetailViewDTO found = null;
+            for (InvoiceDetailViewDTO d : cart) {
+                if (d.getIngredientSupId() == ingSupId
+                        && Math.abs(d.getUnitPrice() - unitPrice) < EPS) {
+                    found = d;
+                    break;
                 }
             }
 
-            if (!merged) {
-                // thêm dòng mới
+            if (found != null) {
+                // Gộp số lượng
+                float newQty = found.getQuantity() + qty;
+                found.setQuantity(newQty);
+                found.setLineTotal(newQty * found.getUnitPrice());
+            } else {
+                // Tạo dòng mới
                 InvoiceDetailViewDTO line = new InvoiceDetailViewDTO();
-                line.setDetailId(0); // tạm (chỉ để hiển thị)
+                line.setDetailId(0);                  // id tạm cho view (nếu cần)
+                line.setInvoiceId(0);                 // chưa xác nhận -> 0 (hoặc để khi confirm mới set)
+                line.setIngredientSupId(ingSupId);    // set khóa thật
                 line.setIngredientName(ingName);
-                line.setQty(qty);
+                line.setQuantity(qty);                     // setter name theo DTO: setQty(...)
                 line.setUnitPrice(unitPrice);
                 line.setLineTotal(qty * unitPrice);
-
                 cart.add(line);
-                cartIngSupIds.add(ingSupId);
             }
 
+            // set lại session
             ses.setAttribute(SessionKeys.CURRENT_CART, cart);
-            ses.setAttribute("CART_INGSUP_IDS", cartIngSupIds);
 
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
 
-        
         if ("/removeLine".equals(path)) {
             int idx = Integer.parseInt(req.getParameter("idx"));
             @SuppressWarnings("unchecked")
             List<InvoiceDetailViewDTO> cart =
                     (List<InvoiceDetailViewDTO>) ses.getAttribute(SessionKeys.CURRENT_CART);
-            @SuppressWarnings("unchecked")
-            List<Integer> cartIngSupIds = (List<Integer>) ses.getAttribute("CART_INGSUP_IDS");
+
             if (cart != null && idx >= 0 && idx < cart.size()) {
                 cart.remove(idx);
-                if (cartIngSupIds != null && idx < cartIngSupIds.size()) {
-                    cartIngSupIds.remove(idx);
-                }
+                ses.setAttribute(SessionKeys.CURRENT_CART, cart);
             }
-            ses.setAttribute(SessionKeys.CURRENT_CART, cart);
-            ses.setAttribute("CART_INGSUP_IDS", cartIngSupIds);
+            // không còn list song song
+            ses.removeAttribute("CART_INGSUP_IDS");
+
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
-        
+
         if ("/addNewIngredient".equals(path)) {
+            IngredientViewDTO i = new IngredientViewDTO();
             Integer supId = (Integer) ses.getAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
             if (supId == null) {
                 resp.sendRedirect(req.getContextPath() + "/supplier/search");
                 return;
             }
-            String name = req.getParameter("name");
-            String type = req.getParameter("type");
-            String unit = req.getParameter("unit");
-            float price = Float.parseFloat(req.getParameter("price"));
+            // giữ nguyên theo cấu trúc hiện có của bạn
+            i.setIngredientSupId(supId);
+            i.setName(req.getParameter("name"));
+            i.setType(req.getParameter("type"));
+            i.setUnit(req.getParameter("unit"));
+            i.setPrice(Float.parseFloat(req.getParameter("price")));
             try {
-      
-                ingSupDAO.addIngredientWithMapping( name, type, unit, price,supId);
+                ingSupDAO.addIngredientWithMapping(i);
             } catch (Exception e) {
                 throw new ServletException(e);
             }
-        
+
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
 
         doGet(req, resp);
-    
     }
 
     @Override
