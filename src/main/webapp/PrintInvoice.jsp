@@ -25,7 +25,7 @@
 
   <h1 class="title">Nhập hàng | In hóa đơn</h1>
 
-  <h2 style="margin: center">HÓA ĐƠN NHẬP</h2>
+  <h2 style="text-align:center">HÓA ĐƠN NHẬP</h2>
   <p><b>Mã hóa đơn:</b> ${invoice.id}</p>
   <p><b>Ngày:</b> <fmt:formatDate value="${invoice.dateIn}" pattern="yyyy-MM-dd" /></p>
   <p><b>Trạng thái:</b>
