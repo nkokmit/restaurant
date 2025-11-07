@@ -54,6 +54,7 @@
                     <input type="hidden" name="ingSupId" value="${it.ingredientSupId}">
                     <input type="number" name="qty" class="input" step="0.01" min="0.01" placeholder="SL" required>
                     <input type="hidden" name="price" value="${it.price}">
+                    <input type="hidden" name="ingName" value="${it.name}">
                     <button type="submit" class="btn btn-sm">Thêm</button>
                   </form>
                 </td>

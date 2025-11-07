@@ -11,108 +11,85 @@ import java.util.*;
 
 public class IngredientSupDAO extends DAO {
 
-  public List<IngredientViewDTO> searchIngredientbyName(int supplierId, String q) {
-    String sql =
-        "SELECT isup.id AS ingredientSupId, i.id AS ingredientId, " +
-        "       i.name, i.type, i.unit, isup.price " +
-        "FROM IngredientSup isup " +
-        "JOIN Ingredient i ON i.id = isup.ingredient_id " +
-        "WHERE isup.supplier_id = ? " +
-        "  AND (i.name LIKE ? + '%' ) " +
-        "ORDER BY i.name";
-    List<IngredientViewDTO> out = new ArrayList<>();
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, supplierId);
-      ps.setString(2, ("%"+ (q==null?"":q.trim())) + "%");
-      try (ResultSet rs = ps.executeQuery()) {
-        while (rs.next()) {
-            IngredientViewDTO v = new IngredientViewDTO();
-            v.setIngredientSupId(rs.getInt("ingredientSupId"));
-            v.setIngredientId(rs.getInt("ingredientId"));
-            v.setName(rs.getString("name"));
-            v.setType(rs.getString("type"));
-            v.setUnit(rs.getString("unit"));   
-            v.setPrice(rs.getFloat("price")); 
-            out.add(v);
+    public List<IngredientViewDTO> searchIngredientbyName(int supplierId, String q) {
+      String sql =
+          "SELECT isup.id AS ingredientSupId, i.id AS ingredientId, " +
+          "       i.name, i.type, i.unit, isup.price " +
+          "FROM IngredientSup isup " +
+          "JOIN Ingredient i ON i.id = isup.ingredient_id " +
+          "WHERE isup.supplier_id = ? " +
+          "  AND (i.name LIKE ? + '%' ) " +
+          "ORDER BY i.name";
+      List<IngredientViewDTO> out = new ArrayList<>();
+      try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, supplierId);
+        ps.setString(2, ("%"+ (q==null?"":q.trim())) + "%");
+        try (ResultSet rs = ps.executeQuery()) {
+          while (rs.next()) {
+              IngredientViewDTO v = new IngredientViewDTO();
+              v.setIngredientSupId(rs.getInt("ingredientSupId"));
+              v.setIngredientId(rs.getInt("ingredientId"));
+              v.setName(rs.getString("name"));
+              v.setType(rs.getString("type"));
+              v.setUnit(rs.getString("unit"));   
+              v.setPrice(rs.getFloat("price")); 
+              out.add(v);
 
+          }
         }
-      }
-    } catch (SQLException e) { throw new RuntimeException(e); }
-    return out;
-  }
-
- public boolean addIngredientWithMapping(IngredientViewDTO i) throws SQLException {
-    con.setAutoCommit(false);
-    try {
-        int ingredientId;
-
-        try (PreparedStatement ps = con.prepareStatement(
-            "SELECT id FROM Ingredient WHERE name = ? AND type = ? AND unit = ?")) {
-            ps.setString(1, i.getName());
-            ps.setString(2, i.getType());
-            ps.setString(3, i.getUnit());
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    ingredientId = rs.getInt("id");
-                } else {
-                    try (PreparedStatement psInsert = con.prepareStatement(
-                        "INSERT INTO Ingredient(name,type,unit) VALUES(?,?,?)",
-                        Statement.RETURN_GENERATED_KEYS)) {
-                        psInsert.setString(1, i.getName());
-                        psInsert.setString(2, i.getType());
-                        psInsert.setString(3, i.getUnit());
-                        psInsert.executeUpdate();
-                        try (ResultSet rsGeneratedKeys = psInsert.getGeneratedKeys()) {
-                            rsGeneratedKeys.next();
-                            ingredientId = rsGeneratedKeys.getInt(1);
-                        }
-                    }
-                }
-            }
-        }
-        int ingredientSupId;
-        try (PreparedStatement ps = con.prepareStatement(
-            "INSERT INTO IngredientSup(ingredient_id,supplier_id,price) VALUES(?,?,?)",
-            Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, ingredientId);
-            ps.setInt(2, i.getIngredientSupId());
-            ps.setFloat(3, i.getPrice());
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                rs.next(); 
-                ingredientSupId = rs.getInt(1);
-            }
-        }
-        con.commit(); 
-        return true;
-    } catch (SQLException ex) { 
-        con.rollback(); 
-        throw ex;
-    } finally { 
-        con.setAutoCommit(true);   
-    }
-}
-    public BasicIngSup getBasic(int ingSupId) {
-        String sql = "SELECT i.name, isup.price FROM IngredientSup isup " +
-                     "JOIN Ingredient i ON i.id = isup.ingredient_id WHERE isup.id = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, ingSupId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new BasicIngSup(rs.getString(1), rs.getFloat(2));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+      } catch (SQLException e) { throw new RuntimeException(e); }
+      return out;
     }
 
-    public static final class BasicIngSup {
-        public final String name;
-        public final float defaultPrice;
-        public BasicIngSup(String name, float defaultPrice) {
-            this.name = name; this.defaultPrice = defaultPrice;
-        }
-    }
+    public boolean addIngredientWithMapping(IngredientViewDTO i) throws SQLException {
+       con.setAutoCommit(false);
+       try {
+           int ingredientId;
+
+           try (PreparedStatement ps = con.prepareStatement(
+               "SELECT id FROM Ingredient WHERE name = ? AND type = ? AND unit = ?")) {
+               ps.setString(1, i.getName());
+               ps.setString(2, i.getType());
+               ps.setString(3, i.getUnit());
+               try (ResultSet rs = ps.executeQuery()) {
+                   if (rs.next()) {
+                       ingredientId = rs.getInt("id");
+                   } else {
+                       try (PreparedStatement psInsert = con.prepareStatement(
+                           "INSERT INTO Ingredient(name,type,unit) VALUES(?,?,?)",
+                           Statement.RETURN_GENERATED_KEYS)) {
+                           psInsert.setString(1, i.getName());
+                           psInsert.setString(2, i.getType());
+                           psInsert.setString(3, i.getUnit());
+                           psInsert.executeUpdate();
+                           try (ResultSet rsGeneratedKeys = psInsert.getGeneratedKeys()) {
+                               rsGeneratedKeys.next();
+                               ingredientId = rsGeneratedKeys.getInt(1);
+                           }
+                       }
+                   }
+               }
+           }
+           int ingredientSupId;
+           try (PreparedStatement ps = con.prepareStatement(
+               "INSERT INTO IngredientSup(ingredient_id,supplier_id,price) VALUES(?,?,?)",
+               Statement.RETURN_GENERATED_KEYS)) {
+               ps.setInt(1, ingredientId);
+               ps.setInt(2, i.getIngredientSupId());
+               ps.setFloat(3, i.getPrice());
+               ps.executeUpdate();
+               try (ResultSet rs = ps.getGeneratedKeys()) {
+                   rs.next(); 
+                   ingredientSupId = rs.getInt(1);
+               }
+           }
+           con.commit(); 
+           return true;
+       } catch (SQLException ex) { 
+           con.rollback(); 
+           throw ex;
+       } finally { 
+           con.setAutoCommit(true);   
+       }
+   }
 }

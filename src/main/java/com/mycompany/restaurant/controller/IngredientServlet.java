@@ -27,12 +27,11 @@ public class IngredientServlet extends HttpServlet {
         if ("/start".equals(path)) {
             int supId = Integer.parseInt(req.getParameter("supplierId"));
             Integer oldSup = (Integer) ses.getAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
-            // đổi supplier => reset cart
+        
             if (oldSup == null || oldSup != supId) {
                 ses.setAttribute(SessionKeys.CURRENT_SUPPLIER_ID, supId);
                 ses.removeAttribute(SessionKeys.CURRENT_CART);
-                // bỏ hẳn list ids song song (không còn dùng)
-                ses.removeAttribute("CART_INGSUP_IDS");
+                
             }
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
@@ -44,28 +43,20 @@ public class IngredientServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/supplier/search");
                 return;
             }
-
-            // Lấy tham số
             int ingSupId     = Integer.parseInt(req.getParameter("ingSupId"));
             float qty        = Float.parseFloat(req.getParameter("qty"));
             float unitPrice  = Float.parseFloat(req.getParameter("price"));
-
-            // Validate cơ bản
+            String ingName = req.getParameter("ingName");
             if (ingSupId <= 0 || qty <= 0f || unitPrice < 0f) {
                 resp.sendRedirect(req.getContextPath() + "/ingredient/search");
                 return;
             }
-
-            // Lấy tên NL để hiển thị
-            IngredientSupDAO.BasicIngSup info = ingSupDAO.getBasic(ingSupId);
-            String ingName = (info != null ? info.name : "Nguyên liệu #" + ingSupId);
-
+         
             @SuppressWarnings("unchecked")
             List<InvoiceDetailViewDTO> cart =
                     (List<InvoiceDetailViewDTO>) ses.getAttribute(SessionKeys.CURRENT_CART);
             if (cart == null) cart = new ArrayList<>();
 
-            // Tìm xem đã có dòng trùng (ingredientSupId + unitPrice) để gộp
             InvoiceDetailViewDTO found = null;
             for (InvoiceDetailViewDTO d : cart) {
                 if (d.getIngredientSupId() == ingSupId
@@ -74,28 +65,23 @@ public class IngredientServlet extends HttpServlet {
                     break;
                 }
             }
-
             if (found != null) {
-                // Gộp số lượng
                 float newQty = found.getQuantity() + qty;
                 found.setQuantity(newQty);
                 found.setLineTotal(newQty * found.getUnitPrice());
             } else {
-                // Tạo dòng mới
                 InvoiceDetailViewDTO line = new InvoiceDetailViewDTO();
-                line.setDetailId(0);                  // id tạm cho view (nếu cần)
-                line.setInvoiceId(0);                 // chưa xác nhận -> 0 (hoặc để khi confirm mới set)
-                line.setIngredientSupId(ingSupId);    // set khóa thật
+                line.setDetailId(0);                 
+                line.setInvoiceId(0);                 
+                line.setIngredientSupId(ingSupId); 
                 line.setIngredientName(ingName);
-                line.setQuantity(qty);                     // setter name theo DTO: setQty(...)
+                line.setQuantity(qty);                  
                 line.setUnitPrice(unitPrice);
                 line.setLineTotal(qty * unitPrice);
                 cart.add(line);
             }
 
-            // set lại session
             ses.setAttribute(SessionKeys.CURRENT_CART, cart);
-
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
@@ -110,9 +96,7 @@ public class IngredientServlet extends HttpServlet {
                 cart.remove(idx);
                 ses.setAttribute(SessionKeys.CURRENT_CART, cart);
             }
-            // không còn list song song
-            ses.removeAttribute("CART_INGSUP_IDS");
-
+           
             resp.sendRedirect(req.getContextPath() + "/ingredient/search");
             return;
         }
@@ -124,7 +108,6 @@ public class IngredientServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/supplier/search");
                 return;
             }
-            // giữ nguyên theo cấu trúc hiện có của bạn
             i.setIngredientSupId(supId);
             i.setName(req.getParameter("name"));
             i.setType(req.getParameter("type"));
@@ -142,7 +125,6 @@ public class IngredientServlet extends HttpServlet {
 
         doGet(req, resp);
     }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
