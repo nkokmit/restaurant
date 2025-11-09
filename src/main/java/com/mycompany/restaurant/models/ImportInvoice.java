@@ -19,7 +19,6 @@ public class ImportInvoice {
     private WarehouseStaff staff;
     private Supplier sup;
     private List<InvoiceDetail> details;
-
     public ImportInvoice() {}
 
     public int getId() { return id; }

@@ -1,4 +1,3 @@
-// src/main/java/com/mycompany/restaurant/controller/AuthServlet.java
 package com.mycompany.restaurant.controller;
 
 import com.mycompany.restaurant.dao.StaffDAO;
@@ -13,6 +12,7 @@ public class AuthServlet extends HttpServlet {
 
     private final StaffDAO staffDAO = new StaffDAO();
 
+    // === LOGIN ===
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -24,15 +24,34 @@ public class AuthServlet extends HttpServlet {
         WarehouseStaff st = staffDAO.findByUsernamePassword(u, p);
         if (st == null) {
             req.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/Login.jsp").forward(req, resp);
             return;
         }
 
         HttpSession ses = req.getSession(true);
         ses.setAttribute(SessionKeys.CURRENT_STAFF_ID, st.getId());
-        // có thể lưu tên để hiển thị
         ses.setAttribute("CURRENT_STAFF_NAME", st.getName());
 
         resp.sendRedirect(req.getContextPath() + "/Home.jsp");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        // chỉ khi gọi đúng /logout mới xử lý, còn lại error
+        if (!req.getServletPath().equals("/logout")) {
+            resp.sendError(404);
+            return;
+        }
+
+        HttpSession ses = req.getSession(false);
+        if (ses != null) {
+            ses.removeAttribute(SessionKeys.CURRENT_STAFF_ID);
+            ses.removeAttribute("CURRENT_STAFF_NAME");
+            ses.invalidate();
+        }
+
+        resp.sendRedirect(req.getContextPath() + "/Login.jsp");
     }
 }

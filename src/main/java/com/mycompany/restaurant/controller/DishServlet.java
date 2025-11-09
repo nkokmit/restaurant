@@ -31,7 +31,7 @@ public class DishServlet extends HttpServlet {
             break;
         case "/view":
             int id = Integer.parseInt(req.getParameter("dishId"));
-            Dish dish = dao.getById(id);
+            Dish dish = dao.getDishById(id);
             req.setAttribute("dish", dish);
             req.getRequestDispatcher("/DishView.jsp").forward(req, res);
             break;

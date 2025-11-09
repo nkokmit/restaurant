@@ -124,11 +124,12 @@
     .success{ color: var(--success) }
 
     @media print{
-      body{ background:#fff; color:#000 }
-      .container{ padding:0 }
-      .card{ width:100%; border:0; box-shadow:none; padding:0 }
-      .btn, .toolbar{ display:none !important }
-      th, td{ border-bottom:1px solid #000 }
+    body{ background:#fff; color:#000 }
+    .container{ padding:0 }
+    .card{ width:100%; border:0; box-shadow:none; padding:0 }
+    .btn, .toolbar{ display:none !important }
+    th, td{ border-bottom:1px solid #000 }
+    .alert-actions { display:none !important; }
     }
     /* Wrapper 2 cột, căn giữa toàn bộ */
     .layout-main{
@@ -174,4 +175,67 @@
     @media (max-width: 1024px){
       .layout-main{ flex-direction: column }
       .side-panel{ width: 100% }
+    }
+    .alert{
+        width:100%;
+        display:flex; align-items:flex-start; gap:14px;
+        border-radius: 14px;
+        padding: 14px 16px;
+        border:1px solid rgba(138,166,255,0.12);
+        background: rgba(255,255,255,0.03);
+        box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      }
+
+    .alert .icon{
+      flex:0 0 auto;
+      width:36px; height:36px; border-radius:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      color: var(--text);
+    }
+
+    .alert .content{ flex: 1 1 auto; min-width:0 }
+    .alert-title{
+      margin: 0 0 2px;
+      font-weight: 700; letter-spacing:.2px;
+      font-size: 15px; color: #fff;
+    }
+    .alert-desc{
+      margin:0; font-size: 13px; color: var(--sub);
+    }
+
+    .alert-actions{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      margin-left: 8px;
+    }
+    .alert .btn.btn-sm{ padding: 8px 12px; border-radius:10px; font-size:13px }
+
+    /* Variants */
+    .alert.success{
+      background: var(--success-bg);
+      border-color: var(--success-br);
+    }
+    .alert.success .icon{
+      background: rgba(70,211,154,.12);
+      color: var(--success);
+    }
+
+    .alert.info{
+      background: var(--info-bg);
+      border-color: var(--info-br);
+    }
+    .alert.info .icon{ background: rgba(124,201,255,.12); color: var(--info); }
+
+    .alert.error{
+      background: var(--danger-bg);
+      border-color: var(--danger-br);
+    }
+    .alert.error .icon{ background: rgba(255,107,107,.12); color: var(--danger); }
+
+    /* Entrance animation */
+    @keyframes slideInUp {
+      from { transform: translateY(-6px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .animate-in{
+      animation: slideInUp .22s ease-out both;
     }

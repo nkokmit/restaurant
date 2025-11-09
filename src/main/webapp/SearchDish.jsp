@@ -17,6 +17,7 @@
 
 </head>
 <body>
+<div class="site-brand">RESTAURANT MIT</div>
 <div class="container">
     <div class="card">
         <h1 class="title">Xem món ăn | Tìm kiếm món ăn </h1>

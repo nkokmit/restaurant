@@ -20,7 +20,34 @@
 <div class="container"><div class="card">
 
   <h1 class="title">Nhập hàng | Xác nhận hóa đơn</h1>
+<c:if test="${done == true}">
+  <div class="alert success animate-in" role="status" aria-live="polite">
+    <div class="icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
 
+    <div class="content">
+      <p class="alert-title">Chốt hóa đơn thành công</p>
+      <p class="alert-desc">
+        Hóa đơn #<b>${invoice.id}</b> đã được tạo. Tổng tiền:
+        <b><fmt:formatNumber value="${total}" maxFractionDigits="0"/></b>.
+        Bạn muốn in ngay bây giờ?
+      </p>
+    </div>
+
+    <div class="alert-actions">
+      <form action="<%=ctx%>/invoice/print" method="post">
+        <button class="btn btn-sm" type="submit">️ In ngay</button>
+      </form>
+      <form action="<%=ctx%>/invoice/done" method="post">
+        <button class="btn btn-sm ghost" type="submit">Không, quay lại</button>
+      </form>
+    </div>
+  </div>
+</c:if>
+  
   <c:if test="${empty lines}">
     <p>Không có dòng nào. <a class="btn" href="<%=ctx%>/ingredient/search">Quay lại thêm</a></p>
   </c:if>

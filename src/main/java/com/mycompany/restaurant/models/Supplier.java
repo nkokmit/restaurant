@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.restaurant.models;
-
+import java.util.*;
 /**
  *
  * @author hungmit
@@ -14,6 +14,7 @@ public class Supplier {
     private String addr;
     private String tel;
     private String email;
+    private List<IngredientSup> listIngSup;
 
     public Supplier() {}
 

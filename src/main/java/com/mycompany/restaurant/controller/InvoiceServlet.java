@@ -39,7 +39,7 @@ public class InvoiceServlet extends HttpServlet {
             req.getRequestDispatcher("/ConfirmInvoice.jsp").forward(req, resp);
             return;
         }
-
+       
         resp.sendError(404);
     }
 
@@ -48,7 +48,7 @@ public class InvoiceServlet extends HttpServlet {
             throws ServletException, IOException {
         String path = req.getPathInfo() == null ? "" : req.getPathInfo();
 
-        if ("/confirm".equals(path)) {
+         if ("/confirm".equals(path)) {
             HttpSession ses = req.getSession();
 
             Integer staffId = (Integer) ses.getAttribute(SessionKeys.CURRENT_STAFF_ID);
@@ -58,13 +58,12 @@ public class InvoiceServlet extends HttpServlet {
                     (List<InvoiceDetailViewDTO>) ses.getAttribute(SessionKeys.CURRENT_CART);
 
             if (staffId == null || supId == null || cart == null || cart.isEmpty()) {
-           
                 resp.sendRedirect(req.getContextPath() + "/ingredient/search");
                 return;
             }
 
             try {
-             
+                // Tạo hóa đơn
                 ImportInvoice iv = new ImportInvoice();
                 Supplier sup = new Supplier(); sup.setId(supId);
                 WarehouseStaff st = new WarehouseStaff(); st.setId(staffId);
@@ -77,29 +76,63 @@ public class InvoiceServlet extends HttpServlet {
                     return;
                 }
 
-            
-                for (InvoiceDetailViewDTO d : cart) {
-                    d.setInvoiceId(iv.getId());
-                }
+                // Gắn invoiceId cho các dòng & lưu
+                for (InvoiceDetailViewDTO d : cart) d.setInvoiceId(iv.getId());
                 detailDAO.addDetail(cart);
 
-           
-                ses.removeAttribute(SessionKeys.CURRENT_CART);
-                ses.removeAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
-
-                req.setAttribute("invoice", iv);
-                req.setAttribute("lines", cart);
+                // Tính tổng
                 float total = 0f;
                 for (InvoiceDetailViewDTO d : cart) total += d.getLineTotal();
-                req.setAttribute("total", total);
+                ses.setAttribute(SessionKeys.LAST_INVOICE, iv);
+                ses.setAttribute(SessionKeys.LAST_LINES, cart);
+                ses.setAttribute(SessionKeys.LAST_TOTAL, total);
 
-                req.getRequestDispatcher("/PrintInvoice.jsp").forward(req, resp);
+
+                ses.removeAttribute(SessionKeys.CURRENT_CART);
+                ses.removeAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
+                req.setAttribute("done", true);
+                req.setAttribute("invoice", iv);
+                req.setAttribute("lines", cart);
+                req.setAttribute("total", total);
+                req.getRequestDispatcher("/ConfirmInvoice.jsp").forward(req, resp);
                 return;
+
             } catch (Exception e) {
                 throw new ServletException(e);
             }
         }
+        if ("/done".equals(path)) {
+            HttpSession ses = req.getSession(false);
+            if (ses != null) {
+                ses.removeAttribute(SessionKeys.CURRENT_CART);
+                ses.removeAttribute(SessionKeys.CURRENT_SUPPLIER_ID);
+            }
+            resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+            return;
+        }
+        if ("/print".equals(path)) {
+            HttpSession ses = req.getSession(false);
+            if (ses == null) {
+                resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+                return;
+            }
+            ImportInvoice iv = (ImportInvoice) ses.getAttribute(SessionKeys.LAST_INVOICE);
+            @SuppressWarnings("unchecked")
+            List<InvoiceDetailViewDTO> lines =
+                    (List<InvoiceDetailViewDTO>) ses.getAttribute(SessionKeys.LAST_LINES);
+            Float total = (Float) ses.getAttribute(SessionKeys.LAST_TOTAL);
 
+            if (iv == null || lines == null || total == null) {
+                resp.sendRedirect(req.getContextPath() + "/ingredient/search");
+                return;
+            }
+
+            req.setAttribute("invoice", iv);
+            req.setAttribute("lines", lines);
+            req.setAttribute("total", total);
+            req.getRequestDispatcher("/PrintInvoice.jsp").forward(req, resp);
+            return;
+        }
         if ("/cancel".equals(path)) {
             HttpSession ses = req.getSession();
             ses.removeAttribute(SessionKeys.CURRENT_CART);
@@ -107,7 +140,6 @@ public class InvoiceServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/supplier/search");
             return;
         }
-
         resp.sendError(404);
     }
 }

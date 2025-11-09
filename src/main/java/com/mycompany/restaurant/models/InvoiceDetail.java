@@ -10,7 +10,6 @@ package com.mycompany.restaurant.models;
  */
 public class InvoiceDetail {
     private int id;
-    private ImportInvoice invoice;
     private IngredientSup ingSup;
     private float quantity;
     
@@ -18,9 +17,6 @@ public class InvoiceDetail {
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-
-    public ImportInvoice getInvoice() { return invoice; }
-    public void setInvoice(ImportInvoice invoice) { this.invoice = invoice; }
 
     public IngredientSup getIngSup() { return ingSup; }
     public void setIngSup(IngredientSup ingSup) { this.ingSup = ingSup; }

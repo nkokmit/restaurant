@@ -28,7 +28,12 @@
     <button type="submit" class="btn">Tìm kiếm món ăn</button>
   </form>
 </div>
-
-</div></div>
+<div style="margin-top:40px; display:flex; justify-content:flex-end">
+    <form method="post" action="<%=ctx%>/auth/logout">
+        <button type="submit" class="btn secondary">Đăng xuất</button>
+    </form>
+</div>
+</div>
+</div>
 </body>
 </html>

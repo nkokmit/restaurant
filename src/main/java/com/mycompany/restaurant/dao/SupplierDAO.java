@@ -48,22 +48,5 @@ public class SupplierDAO extends DAO {
     return out;
   }
 
-  public Supplier getById(int id) {
-    String sql = "SELECT id,name,addr,tel,email FROM Supplier WHERE id=?";
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, id);
-      try (ResultSet rs = ps.executeQuery()) {
-        if (rs.next()) {
-          Supplier s = new Supplier();
-          s.setId(rs.getInt(1));
-          s.setName(rs.getString(2));
-          s.setAddr(rs.getString(3));
-          s.setTel(rs.getString(4));
-          s.setEmail(rs.getString(5));
-          return s;
-        }
-      }
-    } catch (SQLException e) { throw new RuntimeException(e); }
-    return null;
-  }
+  
 }

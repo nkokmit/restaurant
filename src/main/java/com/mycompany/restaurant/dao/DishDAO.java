@@ -31,7 +31,7 @@ public class DishDAO extends DAO {
     } catch (SQLException e) { throw new RuntimeException(e); }
     return out;
   }  
-  public Dish getById(int id) {
+  public Dish getDishById(int id) {
     String sql = "SELECT id,name,type,price,descr,sale FROM Dish WHERE id=?";
     try (PreparedStatement ps = con.prepareStatement(sql)) {
       ps.setInt(1, id);

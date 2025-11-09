@@ -25,7 +25,7 @@
   <div><label>Email: </label><input name="email" class="input"></div>
   <div class="actions between">
         <a class="btn secondary" href="<%=ctx%>/supplier/search">Hủy</a>
-        <button type="submit" class="btn">Lưu</button>
+    <button type="submit" class="btn">Lưu</button>
   </div>
   
 </form>

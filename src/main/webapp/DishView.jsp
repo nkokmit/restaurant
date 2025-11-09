@@ -16,6 +16,7 @@
 </head>
 
 <body>
+<div class="site-brand">RESTAURANT MIT</div>
 <div class="container">
     <div class="card">
 
