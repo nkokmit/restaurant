@@ -39,7 +39,6 @@ public class AuthServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // chỉ khi gọi đúng /logout mới xử lý, còn lại error
         if (!req.getServletPath().equals("/logout")) {
             resp.sendError(404);
             return;

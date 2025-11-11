@@ -13,7 +13,7 @@ import java.util.List;
 
 public class IngredientServlet extends HttpServlet {
 
-    private static final float EPS = 1e-4f; // so sánh float cho unitPrice
+    private static final float EPS = 1e-4f; 
     private final IngredientSupDAO ingSupDAO = new IngredientSupDAO();
 
     @Override

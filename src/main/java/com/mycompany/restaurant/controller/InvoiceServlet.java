@@ -63,7 +63,7 @@ public class InvoiceServlet extends HttpServlet {
             }
 
             try {
-                // Tạo hóa đơn
+           
                 ImportInvoice iv = new ImportInvoice();
                 Supplier sup = new Supplier(); sup.setId(supId);
                 WarehouseStaff st = new WarehouseStaff(); st.setId(staffId);
@@ -76,11 +76,11 @@ public class InvoiceServlet extends HttpServlet {
                     return;
                 }
 
-                // Gắn invoiceId cho các dòng & lưu
+          
                 for (InvoiceDetailViewDTO d : cart) d.setInvoiceId(iv.getId());
                 detailDAO.addDetail(cart);
 
-                // Tính tổng
+             
                 float total = 0f;
                 for (InvoiceDetailViewDTO d : cart) total += d.getLineTotal();
                 ses.setAttribute(SessionKeys.LAST_INVOICE, iv);

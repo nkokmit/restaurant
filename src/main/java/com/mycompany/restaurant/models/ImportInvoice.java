@@ -13,19 +13,19 @@ import java.util.List;
 
 public class ImportInvoice {
     private int id;
-    private Date dateIn;
+    private Date createdAt;
     private int status;
     private String note;
     private WarehouseStaff staff;
     private Supplier sup;
     private List<InvoiceDetail> details;
-    public ImportInvoice() {}
+    public ImportInvoice() {this.createdAt = new Date();}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public Date getDateIn() { return dateIn; }
-    public void setDateIn(Date dateIn) { this.dateIn = dateIn; }
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
     
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }

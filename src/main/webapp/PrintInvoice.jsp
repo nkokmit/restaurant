@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
   String ctx = request.getContextPath();
 %>
@@ -27,7 +26,7 @@
 
   <h2 style="text-align:center">HÓA ĐƠN NHẬP</h2>
   <p><b>Mã hóa đơn:</b> ${invoice.id}</p>
-  <p><b>Ngày:</b> <fmt:formatDate value="${invoice.dateIn}" pattern="yyyy-MM-dd" /></p>
+  <p><b>Ngày:</b> <fmt:formatDate value="${invoice.createdAt}" pattern="dd-MM-yyyy" /></p>
   <p><b>Trạng thái:</b>
     <c:choose>
       <c:when test="${invoice.status == 1}">Đã xác nhận</c:when>
